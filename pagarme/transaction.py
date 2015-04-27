@@ -11,7 +11,7 @@ class Transaction(PagarMe):
     def __init__(self, amount=None, card_hash=None, card_id=None,
                  installments=1, payment_method='credit_card', customer=None,
                  postback_url=None, soft_descriptor=None, capture=True,
-                 metadata=None):
+                 boleto_expiration_date=None, metadata=None):
         self.amount = amount
         self.card_hash = card_hash
         self.card_id = card_id
@@ -22,6 +22,7 @@ class Transaction(PagarMe):
         self.soft_descriptor = soft_descriptor
         self.capture = capture
         self.metadata = metadata
+        self.boleto_expiration_date = boleto_expiration_date
         self.data = {}
 
     def charge(self):
@@ -39,6 +40,9 @@ class Transaction(PagarMe):
 
         if self.metadata:
             params.update(self.metadata.to_dict())
+
+        if self.boleto_expiration_date:
+            params['boleto_expiration_date'] = self.boleto_expiration_date
 
         if self.payment_method == 'credit_card':
 
